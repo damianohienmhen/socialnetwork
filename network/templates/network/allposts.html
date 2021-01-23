@@ -1,0 +1,87 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<h2 >All Posts<h2>
+
+
+<div class="border">
+<h5>New Post</h5>
+
+<form action = "{% url 'postcomment' %}" method="POST"> 
+      <div class="col-auto">
+      {{ post_comment.as_p }} 
+      {% csrf_token %} 
+      </div>
+      <button type="submit" name = "post" value="Post" class="btn btn-primary">Post</button>
+  </form>
+</div>
+
+</br>
+
+</br>
+
+
+
+{% for post in page_obj %}
+  
+    <div id = "thepost_{{post.id}}" class="containerborder"><br>
+                 <div style="font-size:30px;">{{post.user}}</div><br>
+                 <button class="btn btn-sm btn-outline-primary" onclick=edit(`{{post.id}}`)>Edit</button><br>
+                  {{post.post_content}}<br>
+                  {{post.created}}<br>
+                  <button onclick=addlikes(`{{post.id}}`) id="likesbutton_{{post.id}}">{{post.likes.count}}</button> <i class="em em-heart" aria-role="presentation" aria-label="HEAVY BLACK HEART"></i>         
+   </div>
+   
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+
+
+
+
+
+
+
+ <div id="container">
+   </div>
+   
+ <div id = "proto">
+   </div>
+   
+  <div id = "proto1">
+   </div>
+   
+   <div id = "proto2">
+   </div>
+
+
+    
+
+
+
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/inbox.js' %}"></script>
+{% endblock %}
+
