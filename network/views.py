@@ -10,7 +10,8 @@ import json
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import User, Post, Follower
+
+from .models import User, Post
 from .forms import CommentPosts, EditPosts
 
 
@@ -52,7 +53,7 @@ def addlikes(request, id):
    
     return JsonResponse(list, safe=False)
     
-   
+
 def edit(request, id):
     post = Post.objects.get(id = id)
     post_content = post.post_content
@@ -70,9 +71,56 @@ def submit(request, id):
             updatepost = request.POST.get("updatepost")
             post.post_content = str(updatepost)
             post.save(update_fields=["post_content"])
-            
-            thepost = {"postid": post.id, "post_content": post.post_content}
-            return JsonResponse(thepost, safe=False)
+            submitlist = [{"post_content": post.post_content, "postid": post.id}]
+    
+        return HttpResponseRedirect(reverse("next"))
+
+def follow(request, theuser):
+    follower = User.objects.get(username = request.user)
+    followers = follower.followers.all()
+    persontofollow = User.objects.get(username = theuser)
+    if persontofollow in followers:
+        follower.followers.remove(persontofollow)
+        
+        theuser = User.objects.get(username = theuser)
+        userposts = Post.objects.filter(user = theuser)
+        paginator = Paginator(userposts, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+    
+        return render(request, "network/profilepage.html", {"page_obj": page_obj, 
+        "userposts": userposts, "theuser": theuser, "message": ("You've Succesfully Unfollowed %s " %persontofollow)})
+    else:
+        follower.followers.add(persontofollow)
+        
+        theuser = User.objects.get(username = theuser)
+        userposts = Post.objects.filter(user = theuser)
+        paginator = Paginator(userposts, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+    
+        return render(request, "network/profilepage.html", {"page_obj": page_obj, 
+        "userposts": userposts, "theuser": theuser, "message": ("You've Succesfully Followed %s " %persontofollow)})
+
+def following(request):
+    currentuser = User.objects.get(username = request.user)
+    followingusers = currentuser.followers.all()
+    followingposts = Post.objects.filter(user__id__in= followingusers)
+    
+    paginator = Paginator(followingposts, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, "network/following.html", {"page_obj": page_obj,})   
+                   
+def profilepage(request, user):
+    theuser = User.objects.get(username = user)
+    userposts = Post.objects.filter(user = theuser)
+    paginator = Paginator(userposts, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, "network/profilepage.html", {"page_obj": page_obj, "userposts": userposts, "theuser": theuser}) 
 
         
 def postcomment(request):

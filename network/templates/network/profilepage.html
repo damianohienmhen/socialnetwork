@@ -3,34 +3,26 @@
 
 {% block body %}
 
-<h2 >All Posts<h2>
-
-
-<div class="border">
-<h5>New Post</h5>
-
-<form action = "{% url 'postcomment' %}" method="POST"> 
-      <div class="col-auto">
-      {{ post_comment.as_p }} 
-      {% csrf_token %} 
-      </div>
-      <button type="submit" name = "post" value="Post" class="btn btn-primary">Post</button>
-  </form>
+<div style="font-size:40px;" >{{theuser}}'s Profile Page<div>
+<div style="font-size:20px;" class="text-primary">
+{% if message %}
+        {{ message }}
+{% endif %}
 </div>
-
-</br>
-
-</br>
-
-
-
+{% if user == theuser %}
+{% else %}
+<a href="{% url 'follow' theuser.username %}" class="btn btn-primary">Follow</a>
+{% endif %}
+<br>
+<a href="https://lh3.googleusercontent.com/cL0JTg5e1P5VZH0i8liV9XvDHto0VjweTTXjvAvSowQHvFUDTy3k_6oYP8ZiHJ4bAg-tnBvzEm7ZSgU2sQsuMn9pxFgrUJCJZ1PlEKn-yDclwvGJEmCK2WwgqVH5_5sCKeiY1onj8g=s225-p-k?source=screenshot.guru"> <img src="https://lh3.googleusercontent.com/cL0JTg5e1P5VZH0i8liV9XvDHto0VjweTTXjvAvSowQHvFUDTy3k_6oYP8ZiHJ4bAg-tnBvzEm7ZSgU2sQsuMn9pxFgrUJCJZ1PlEKn-yDclwvGJEmCK2WwgqVH5_5sCKeiY1onj8g=s225-p-k" /> </a>
 {% for post in page_obj %}
+
   
     <div id = "thepost_{{post.id}}" class="containerborder"><br>
                  <a href="{% url 'profilepage' post.user %}" style="font-size:30px;">{{post.user}}</a><br>
                  {% if user ==  post.user %}
                  <button class="btn btn-sm btn-outline-primary" onclick=edit(`{{post.id}}`)>Edit</button><br>
-                 {% else %}
+                  {% else %}
                  <br>
                  {% endif %}
                   {{post.post_content}}<br>
@@ -64,21 +56,6 @@
 
 
 
-
- <div id="container">
-   </div>
-   
- <div id = "proto">
-   </div>
-   
-  <div id = "proto1">
-   </div>
-   
-   <div id = "proto2">
-   </div>
-
-
-    
 
 
 

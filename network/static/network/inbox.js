@@ -32,12 +32,7 @@ document.querySelector(`#thepost_${edit.postid}`).innerHTML =  r;
 
 function submit(id) { 
 
-fetch(`/submit/${id}`,{
- method: 'POST', // or 'PUT'
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  })
+fetch(`/submit/${id}`)
 .then(response => response.json())
 .then(post => {
 

@@ -14,5 +14,8 @@ urlpatterns = [
     path("myposts", views.posts, name="myposts"),
     path("next", views.next, name = "next"),
     path("edit/<int:id>", views.edit, name = "edit"),
-    path("submit/<int:id>", views.submit, name = "submit")
+    path("submit/<int:id>", views.submit, name = "submit"),
+    path("profilepage/<str:user>", views.profilepage, name="profilepage"),
+    path("follow/<str:theuser>", views.follow, name = "follow"),
+    path("following", views.following, name = "following")
 ]

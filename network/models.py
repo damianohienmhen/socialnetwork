@@ -5,6 +5,9 @@ from django.db import models
 
 class User(AbstractUser):
     nickname = models.CharField(max_length=64, default="")
+    followers= models.ManyToManyField('self', related_name="followers")
+    
+   
     
     def serialize(self):
         return {
@@ -34,10 +37,5 @@ class Post(models.Model):
    
     
         
-class Follower(models.Model):
-    person_followed=models.ForeignKey(User, on_delete=models.CASCADE, related_name="person_followed")
-    follower= models.ForeignKey(User,on_delete=models.CASCADE, related_name = "follower")
-    
-    def __str__(self):
-        return f"{self.person_followed} ({self.follower})"
+
     

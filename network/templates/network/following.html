@@ -3,34 +3,16 @@
 
 {% block body %}
 
-<h2 >All Posts<h2>
-
-
-<div class="border">
-<h5>New Post</h5>
-
-<form action = "{% url 'postcomment' %}" method="POST"> 
-      <div class="col-auto">
-      {{ post_comment.as_p }} 
-      {% csrf_token %} 
-      </div>
-      <button type="submit" name = "post" value="Post" class="btn btn-primary">Post</button>
-  </form>
-</div>
-
-</br>
-
-</br>
-
-
+<div style="font-size:40px;" class="text-primary">Posts By People You Follow</div><br>
 
 {% for post in page_obj %}
+
   
     <div id = "thepost_{{post.id}}" class="containerborder"><br>
                  <a href="{% url 'profilepage' post.user %}" style="font-size:30px;">{{post.user}}</a><br>
                  {% if user ==  post.user %}
                  <button class="btn btn-sm btn-outline-primary" onclick=edit(`{{post.id}}`)>Edit</button><br>
-                 {% else %}
+                  {% else %}
                  <br>
                  {% endif %}
                   {{post.post_content}}<br>
@@ -65,21 +47,6 @@
 
 
 
- <div id="container">
-   </div>
-   
- <div id = "proto">
-   </div>
-   
-  <div id = "proto1">
-   </div>
-   
-   <div id = "proto2">
-   </div>
-
-
-    
-
 
 
 
@@ -88,4 +55,3 @@
 {% block script %}
     <script src="{% static 'network/inbox.js' %}"></script>
 {% endblock %}
-
