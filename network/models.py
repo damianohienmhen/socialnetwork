@@ -5,8 +5,8 @@ from django.db import models
 
 class User(AbstractUser):
     nickname = models.CharField(max_length=64, default="")
-    followers= models.ManyToManyField('self', related_name="followers")
-    
+    following= models.ManyToManyField('self', related_name="peoplefollowing", symmetrical = False)
+    followers = models.ManyToManyField('self' , related_name = "followers")
    
     
     def serialize(self):

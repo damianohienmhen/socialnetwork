@@ -9,9 +9,12 @@
         {{ message }}
 {% endif %}
 </div>
+<div style="font-size:15px;" class="btn btn-primary">{{ peoplefollowing }} <br>Following </div>
+<div style="font-size:15px;" class="btn btn-primary">{{ PeopleFollowingUser }} <br>Followers </div>
 {% if user == theuser %}
 {% else %}
-<a href="{% url 'follow' theuser.username %}" class="btn btn-primary">Follow</a>
+
+<a href="{% url 'follow' theuser.username %}" class="btn btn-danger">Follow/Unfollow</a>
 {% endif %}
 <br>
 <a href="https://lh3.googleusercontent.com/cL0JTg5e1P5VZH0i8liV9XvDHto0VjweTTXjvAvSowQHvFUDTy3k_6oYP8ZiHJ4bAg-tnBvzEm7ZSgU2sQsuMn9pxFgrUJCJZ1PlEKn-yDclwvGJEmCK2WwgqVH5_5sCKeiY1onj8g=s225-p-k?source=screenshot.guru"> <img src="https://lh3.googleusercontent.com/cL0JTg5e1P5VZH0i8liV9XvDHto0VjweTTXjvAvSowQHvFUDTy3k_6oYP8ZiHJ4bAg-tnBvzEm7ZSgU2sQsuMn9pxFgrUJCJZ1PlEKn-yDclwvGJEmCK2WwgqVH5_5sCKeiY1onj8g=s225-p-k" /> </a>

@@ -77,34 +77,43 @@ def submit(request, id):
 
 def follow(request, theuser):
     follower = User.objects.get(username = request.user)
-    followers = follower.followers.all()
+    followers = follower.following.all()
     persontofollow = User.objects.get(username = theuser)
     if persontofollow in followers:
-        follower.followers.remove(persontofollow)
+        follower.following.remove(persontofollow)
+
         
         theuser = User.objects.get(username = theuser)
         userposts = Post.objects.filter(user = theuser)
         paginator = Paginator(userposts, 5)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        
+        followers = User.objects.all().filter(following__username__contains = theuser).count()
+        peoplefollowing = theuser.following.all().count()
     
-        return render(request, "network/profilepage.html", {"page_obj": page_obj, 
-        "userposts": userposts, "theuser": theuser, "message": ("You've Succesfully Unfollowed %s " %persontofollow)})
+        return render(request, "network/profilepage.html", {"page_obj": page_obj, "userposts": userposts, 
+        "theuser": theuser, "peoplefollowing": peoplefollowing, "PeopleFollowingUser": followers,
+        "message": "You've Succesfully Unfollowed %s" %theuser})
     else:
-        follower.followers.add(persontofollow)
+        follower.following.add(persontofollow)
         
         theuser = User.objects.get(username = theuser)
         userposts = Post.objects.filter(user = theuser)
         paginator = Paginator(userposts, 5)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        
+        followers = User.objects.all().filter(following__username__contains = theuser).count()
+        peoplefollowing = theuser.following.all().count()
     
-        return render(request, "network/profilepage.html", {"page_obj": page_obj, 
-        "userposts": userposts, "theuser": theuser, "message": ("You've Succesfully Followed %s " %persontofollow)})
+        return render(request, "network/profilepage.html", {"page_obj": page_obj, "userposts": userposts, 
+    "theuser": theuser, "peoplefollowing": peoplefollowing, "PeopleFollowingUser": followers,
+     "message": "You've Succesfully Followed %s" %theuser})
 
 def following(request):
     currentuser = User.objects.get(username = request.user)
-    followingusers = currentuser.followers.all()
+    followingusers = currentuser.following.all()
     followingposts = Post.objects.filter(user__id__in= followingusers)
     
     paginator = Paginator(followingposts, 5)
@@ -120,7 +129,12 @@ def profilepage(request, user):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    return render(request, "network/profilepage.html", {"page_obj": page_obj, "userposts": userposts, "theuser": theuser}) 
+    followers = User.objects.all().filter(following__username__contains = theuser).count()
+  
+    peoplefollowing = theuser.following.all().count()
+    
+    return render(request, "network/profilepage.html", {"page_obj": page_obj, "userposts": userposts, 
+    "theuser": theuser, "peoplefollowing": peoplefollowing, "PeopleFollowingUser": followers}) 
 
         
 def postcomment(request):
